@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <!--<TextView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="Latest 10 Orders"-->
+        <!--android:fontFamily="@font/pt_sans"-->
+        <!--android:paddingLeft="16dp"-->
+        <!--android:paddingTop="4dp"-->
+        <!--android:paddingBottom="4dp"-->
+        <!--android:textColor="#000"-->
+        <!--android:textSize="18dp" />-->
+
+
+    <!--<android.support.v7.widget.RecyclerView-->
+        <!--android:id="@+id/latest_ten_orders"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content" />-->
+
+    <!--<TextView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="Latest 10 Freelancers Requests"-->
+        <!--android:fontFamily="@font/pt_sans"-->
+        <!--android:paddingLeft="16dp"-->
+        <!--android:paddingTop="4dp"-->
+        <!--android:paddingBottom="4dp"-->
+        <!--android:textColor="#000"-->
+        <!--android:textSize="18dp" />-->
+
+
+    <!--<android.support.v7.widget.RecyclerView-->
+        <!--android:id="@+id/latest_ten_freelancer_req"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content" />-->
+
+    <!--<TextView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="Latest 10 Agents"-->
+        <!--android:fontFamily="@font/pt_sans"-->
+        <!--android:paddingLeft="16dp"-->
+        <!--android:paddingTop="4dp"-->
+        <!--android:paddingBottom="4dp"-->
+        <!--android:textColor="#000"-->
+        <!--android:textSize="18dp" />-->
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/latest_ten_agents"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>
