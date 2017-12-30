@@ -46,6 +46,10 @@ public class Agent {
         return agent;
     }
 
+    @Override
+    public String toString() {
+        return this.getUserFullName();
+    }
 
     public String getUserId() {
         return userId;

@@ -1,0 +1,29 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    tools:context="com.wishadesign.app.dtrac.fragment.OutletFragment"
+    android:paddingTop="55dp"
+    android:focusableInTouchMode="true"
+    android:descendantFocusability="beforeDescendants">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="5dp" />
+
+    <android.support.v7.widget.SearchView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:queryHint="Filter by Status, Agent or Outlet"
+        android:id="@+id/all_order_searchview"
+        android:nextFocusUp="@id/all_order_searchview"
+        android:nextFocusLeft="@id/all_order_searchview"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/all_order_rv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

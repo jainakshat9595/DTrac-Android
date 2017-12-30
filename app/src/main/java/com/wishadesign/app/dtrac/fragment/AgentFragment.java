@@ -76,6 +76,8 @@ public class AgentFragment extends Fragment {
         mSearchView = (SearchView) view.findViewById(R.id.all_agent_searchview);
         mSearchView.setIconified(false);
 
+        mSearchView.clearFocus();
+
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {

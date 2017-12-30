@@ -29,10 +29,10 @@
             android:id="@+id/nav_orders"
             android:icon="@drawable/receipt"
             android:title="Orders" />
-        <item
-            android:id="@+id/nav_da_topup"
-            android:icon="@drawable/plus_box"
-            android:title="DA Top Up" />
+        <!--<item-->
+            <!--android:id="@+id/nav_da_topup"-->
+            <!--android:icon="@drawable/plus_box"-->
+            <!--android:title="DA Top Up" />-->
         <item
             android:id="@+id/nav_crm"
             android:icon="@drawable/chart_histogram"

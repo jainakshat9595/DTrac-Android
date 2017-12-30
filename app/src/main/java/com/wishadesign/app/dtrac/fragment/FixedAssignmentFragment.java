@@ -17,9 +17,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.wishadesign.app.dtrac.R;
-import com.wishadesign.app.dtrac.adapter.AllAgentsAdapter;
+import com.wishadesign.app.dtrac.adapter.AllFixedAssignmentAdapter;
 import com.wishadesign.app.dtrac.adapter.AllOutletsAdapter;
-import com.wishadesign.app.dtrac.model.Agent;
+import com.wishadesign.app.dtrac.model.FixedAssignment;
 import com.wishadesign.app.dtrac.model.Outlet;
 import com.wishadesign.app.dtrac.util.APIRequest;
 import com.wishadesign.app.dtrac.util.Config;
@@ -33,28 +33,28 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class OutletFragment extends Fragment {
+public class FixedAssignmentFragment extends Fragment {
 
-    private static OutletFragment instance;
+    private static FixedAssignmentFragment instance;
 
     private SessionManager mSessionManager;
 
-    private ArrayList<Outlet> mAllOutletsList;
+    private ArrayList<FixedAssignment> mAllFixedAssignmentList;
 
     private ProgressDialog mProgress;
-    private RecyclerView mAllOutletRV;
-    private AllOutletsAdapter mAdapter;
+    private RecyclerView mAllFixedAssignmentRV;
+    private AllFixedAssignmentAdapter mAdapter;
 
     private SearchView mSearchView;
 
-    private ArrayList<Outlet> mFilteredDataList;
+    private ArrayList<FixedAssignment> mFilteredDataList;
 
-    public OutletFragment() {
+    public FixedAssignmentFragment() {
     }
 
     public static Fragment newInstance() {
         if(instance == null) {
-            instance = new OutletFragment();
+            instance = new FixedAssignmentFragment();
         }
         return instance;
     }
@@ -67,11 +67,11 @@ public class OutletFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_outlets, container, false);
+        View view = inflater.inflate(R.layout.fragment_fixed_assignments, container, false);
 
         mSessionManager = SessionManager.getInstance(getContext());
 
-        mSearchView = (SearchView) view.findViewById(R.id.all_outlet_searchview);
+        mSearchView = (SearchView) view.findViewById(R.id.all_fixed_assignment_searchview);
         mSearchView.setIconified(false);
 
         mSearchView.clearFocus();
@@ -80,12 +80,12 @@ public class OutletFragment extends Fragment {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 if (query.isEmpty()) {
-                    mFilteredDataList = mAllOutletsList;
+                    mFilteredDataList = mAllFixedAssignmentList;
                 } else {
-                    ArrayList<Outlet> filteredList = new ArrayList<>();
-                    for (Outlet outlet: mAllOutletsList) {
-                        if (outlet.getCity().toLowerCase().contains(query.toLowerCase()) || outlet.getOutletName().toLowerCase().contains(query.toLowerCase())) {
-                            filteredList.add(outlet);
+                    ArrayList<FixedAssignment> filteredList = new ArrayList<>();
+                    for (FixedAssignment request: mAllFixedAssignmentList) {
+                        if (request.getBranch_name().toLowerCase().contains(query.toLowerCase()) || request.getAgentName().toLowerCase().contains(query.toLowerCase()) || request.getStatus().toLowerCase().contains(query.toLowerCase())) {
+                            filteredList.add(request);
                         }
                     }
                     mFilteredDataList = filteredList;
@@ -100,12 +100,12 @@ public class OutletFragment extends Fragment {
             @Override
             public boolean onQueryTextChange(String query) {
                 if (query.isEmpty()) {
-                    mFilteredDataList = mAllOutletsList;
+                    mFilteredDataList = mAllFixedAssignmentList;
                 } else {
-                    ArrayList<Outlet> filteredList = new ArrayList<>();
-                    for (Outlet outlet: mAllOutletsList) {
-                        if (outlet.getCity().toLowerCase().contains(query.toLowerCase()) || outlet.getOutletName().toLowerCase().contains(query.toLowerCase())) {
-                            filteredList.add(outlet);
+                    ArrayList<FixedAssignment> filteredList = new ArrayList<>();
+                    for (FixedAssignment request: mAllFixedAssignmentList) {
+                        if (request.getBranch_name().toLowerCase().contains(query.toLowerCase()) || request.getAgentName().toLowerCase().contains(query.toLowerCase()) || request.getStatus().toLowerCase().contains(query.toLowerCase())) {
+                            filteredList.add(request);
                         }
                     }
                     mFilteredDataList = filteredList;
@@ -123,34 +123,34 @@ public class OutletFragment extends Fragment {
         mProgress.setMessage("Wait while loading...");
         mProgress.setCancelable(false);
 
-        mAllOutletRV = (RecyclerView) view.findViewById(R.id.all_outlet_rv);
+        mAllFixedAssignmentRV = (RecyclerView) view.findViewById(R.id.all_fixed_assignment_rv);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
-        mAllOutletRV.setLayoutManager(mLayoutManager);
-        mAllOutletRV.setItemAnimator(new DefaultItemAnimator());
+        mAllFixedAssignmentRV.setLayoutManager(mLayoutManager);
+        mAllFixedAssignmentRV.setItemAnimator(new DefaultItemAnimator());
 
-        mAdapter = new AllOutletsAdapter(getContext(), new ArrayList<Outlet>());
-        mAllOutletRV.setAdapter(mAdapter);
+        mAdapter = new AllFixedAssignmentAdapter(getContext(), new ArrayList<FixedAssignment>());
+        mAllFixedAssignmentRV.setAdapter(mAdapter);
 
-        mAllOutletsList = new ArrayList<Outlet>();
+        mAllFixedAssignmentList = new ArrayList<FixedAssignment>();
 
-        getAllOutlets();
+        getAllFixedAssignments();
 
         return view;
     }
 
-    private void getAllOutlets() {
-        StringRequest strRequest = new StringRequest(Request.Method.POST, Config.BASE_URL+Config.GET_OUTLET_LIST, new Response.Listener<String>() {
+    private void getAllFixedAssignments() {
+        StringRequest strRequest = new StringRequest(Request.Method.POST, Config.BASE_URL+Config.GET_FIXED_ASSIGNMENT_LIST, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 mProgress.dismiss();
                 try {
                     JSONObject resp = new JSONObject(response);
-                    JSONArray outlets_array = resp.getJSONArray("outletList");
-                    mAllOutletsList.clear();
-                    for (int i = 0; i < outlets_array.length(); i++) {
-                        mAllOutletsList.add(Outlet.parse((JSONObject) outlets_array.get(i)));
+                    JSONArray fixed_assignment_array = resp.getJSONArray("assignments");
+                    mAllFixedAssignmentList.clear();
+                    for (int i = 0; i < fixed_assignment_array.length(); i++) {
+                        mAllFixedAssignmentList.add(FixedAssignment.parse((JSONObject) fixed_assignment_array.get(i)));
                     }
-                    mAdapter.setData(mAllOutletsList);
+                    mAdapter.setData(mAllFixedAssignmentList);
                     mAdapter.notifyDataSetChanged();
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -161,7 +161,7 @@ public class OutletFragment extends Fragment {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         mProgress.dismiss();
-                        Log.d("OutletFragment", error.getMessage());
+                        Log.d("FixedAssignmentFragment", error.getMessage());
                     }
                 })
         {

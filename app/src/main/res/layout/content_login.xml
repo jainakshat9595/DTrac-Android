@@ -44,7 +44,7 @@
                     android:fontFamily="@font/pt_sans"
                     android:hint="@string/username_hint"
                     android:singleLine="true"
-                    android:text="9707145160"/>
+                    android:text=""/>
 
             </android.support.design.widget.TextInputLayout>
 
@@ -62,7 +62,7 @@
                     android:hint="@string/password_hint"
                     android:inputType="textPassword"
                     android:fontFamily="@font/pt_sans"
-                    android:text="1234"/>
+                    android:text=""/>
 
             </android.support.design.widget.TextInputLayout>
 

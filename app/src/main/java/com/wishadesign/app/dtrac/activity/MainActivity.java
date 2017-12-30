@@ -33,6 +33,8 @@ import com.android.volley.toolbox.StringRequest;
 import com.wishadesign.app.dtrac.R;
 import com.wishadesign.app.dtrac.fragment.AgentFragment;
 import com.wishadesign.app.dtrac.fragment.DashboardFragment;
+import com.wishadesign.app.dtrac.fragment.FixedAssignmentFragment;
+import com.wishadesign.app.dtrac.fragment.OrderFragment;
 import com.wishadesign.app.dtrac.fragment.OutletFragment;
 import com.wishadesign.app.dtrac.util.APIRequest;
 import com.wishadesign.app.dtrac.util.Config;
@@ -51,6 +53,7 @@ public class MainActivity extends AppCompatActivity
     private TextView mNavUsername;
     private TextView mNavEmail;
     private TextView mWalletBalance;
+    private TextView mUserFullName;
     private Toolbar mToolbar;
     private DrawerLayout mDrawer;
     private NavigationView mNavigationView;
@@ -103,11 +106,9 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_all_outlets) {
             ft.replace(R.id.main_container, OutletFragment.newInstance());
         } else if (id == R.id.nav_fixed_assignment) {
-
+            ft.replace(R.id.main_container, FixedAssignmentFragment.newInstance());
         } else if (id == R.id.nav_orders) {
-            //ft.replace(R.id.main_container, OrderFragment.newInstance());
-        } else if (id == R.id.nav_da_topup) {
-
+            ft.replace(R.id.main_container, OrderFragment.newInstance());
         } else if (id == R.id.nav_crm) {
 
         } else if (id == R.id.nav_logout) {
@@ -167,6 +168,7 @@ public class MainActivity extends AppCompatActivity
         mNavEmail = (TextView) mNavHeader.findViewById(R.id.nav_email);
 
         mWalletBalance = (TextView) findViewById(R.id.wallet_balance);
+        mUserFullName = (TextView) findViewById(R.id.user_fullname);
 
         mProgress = new ProgressDialog(this);
         mProgress.setTitle("Loading");
@@ -194,7 +196,7 @@ public class MainActivity extends AppCompatActivity
                     JSONObject userData = resp.getJSONObject("data");
                     mNavUsername.setText(userData.getString("username"));
                     mNavEmail.setText(userData.getString("email"));
-                    getSupportActionBar().setTitle(Util.toTitleCase(userData.getString("fname")+" "+userData.getString("lname")));
+                    mUserFullName.setText(Util.toTitleCase(userData.getString("fname")+" "+userData.getString("lname")));
                     mWalletBalance.setText(userData.getString("total")+"/-");
                 } catch (JSONException e) {
                     e.printStackTrace();
