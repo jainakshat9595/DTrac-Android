@@ -1,6 +1,7 @@
 package com.wishadesign.app.dtrac.activity;
 
 import android.app.ProgressDialog;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -9,15 +10,18 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.wishadesign.app.dtrac.DTracApplication;
 import com.wishadesign.app.dtrac.R;
 import com.wishadesign.app.dtrac.util.APIRequest;
 import com.wishadesign.app.dtrac.util.Config;
+import com.wishadesign.app.dtrac.util.ConnectivityReceiver;
 import com.wishadesign.app.dtrac.util.Util;
 
 import org.json.JSONException;
@@ -26,7 +30,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ForgotPasswordActivty extends AppCompatActivity {
+public class ForgotPasswordActivty extends AppCompatActivity implements ConnectivityReceiver.ConnectivityReceiverListener {
 
     private EditText mEmail;
     private FloatingActionButton mForgotPassConBtn;
@@ -68,7 +72,7 @@ public class ForgotPasswordActivty extends AppCompatActivity {
                             @Override
                             public void onErrorResponse(VolleyError error) {
                                 mProgress.dismiss();
-                                Log.d("ForgotPasswordActivty", error.getMessage());
+                                error.printStackTrace();
                             }
                         })
                 {
@@ -95,6 +99,27 @@ public class ForgotPasswordActivty extends AppCompatActivity {
         mProgress.setTitle("Loading");
         mProgress.setMessage("Wait while loading...");
         mProgress.setCancelable(false);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        DTracApplication.getInstance().setConnectivityListener(this);
+    }
+
+    @Override
+    public void onNetworkConnectionChanged(boolean isConnected) {
+        String message;
+        if (isConnected) {
+            message = "Connected to Internet";
+        } else {
+            APIRequest.getInstance(getBaseContext()).cancelAll();
+            message = "Sorry! Not connected to internet";
+        }
+
+        Toast snackbar = Toast.makeText(getBaseContext(), message, Toast.LENGTH_LONG);
+
+        snackbar.show();
     }
 
 }

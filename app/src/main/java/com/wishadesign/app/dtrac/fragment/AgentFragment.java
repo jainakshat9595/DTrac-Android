@@ -25,6 +25,7 @@ import com.wishadesign.app.dtrac.adapter.LatestAgentsAdapter;
 import com.wishadesign.app.dtrac.model.Agent;
 import com.wishadesign.app.dtrac.util.APIRequest;
 import com.wishadesign.app.dtrac.util.Config;
+import com.wishadesign.app.dtrac.util.CustomFragment;
 import com.wishadesign.app.dtrac.util.SessionManager;
 
 import org.json.JSONArray;
@@ -35,7 +36,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class AgentFragment extends Fragment {
+public class AgentFragment extends CustomFragment {
 
     private static AgentFragment instance;
 
@@ -54,7 +55,7 @@ public class AgentFragment extends Fragment {
     public AgentFragment() {
     }
 
-    public static Fragment newInstance() {
+    public static CustomFragment newInstance() {
         if(instance == null) {
             instance = new AgentFragment();
         }
@@ -164,7 +165,7 @@ public class AgentFragment extends Fragment {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         mProgress.dismiss();
-                        Log.d("AgentFragment", error.getMessage());
+                        error.printStackTrace();
                     }
                 })
         {
@@ -180,4 +181,9 @@ public class AgentFragment extends Fragment {
         APIRequest.getInstance(getContext()).addToRequestQueue(strRequest);
     }
 
+    @Override
+    public void refresh() {
+        super.refresh();
+        getAllAgents();
+    }
 }

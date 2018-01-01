@@ -1,5 +1,6 @@
 package com.wishadesign.app.dtrac.activity;
 
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -13,11 +14,16 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.wishadesign.app.dtrac.DTracApplication;
 import com.wishadesign.app.dtrac.R;
+import com.wishadesign.app.dtrac.util.APIRequest;
 import com.wishadesign.app.dtrac.util.Config;
+import com.wishadesign.app.dtrac.util.ConnectivityReceiver;
 
-public class SignupActivity extends AppCompatActivity {
+public class SignupActivity extends AppCompatActivity implements ConnectivityReceiver.ConnectivityReceiverListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +78,22 @@ public class SignupActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         CookieSyncManager.getInstance().sync();
+        DTracApplication.getInstance().setConnectivityListener(this);
+    }
+
+    @Override
+    public void onNetworkConnectionChanged(boolean isConnected) {
+        String message;
+        if (isConnected) {
+            message = "Connected to Internet";
+        } else {
+            APIRequest.getInstance(getBaseContext()).cancelAll();
+            message = "Sorry! Not connected to internet";
+        }
+
+        Toast snackbar = Toast.makeText(getBaseContext(), message, Toast.LENGTH_LONG);
+
+        snackbar.show();
     }
 
 }

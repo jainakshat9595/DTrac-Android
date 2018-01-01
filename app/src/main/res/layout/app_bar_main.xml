@@ -28,7 +28,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:fontFamily="@font/pt_sans"
-                    android:text="Akshat Jain"
+
                     android:textSize="18dp"
                     android:textColor="#fff" />
 
@@ -56,8 +56,8 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/pt_sans"
                         android:textSize="18dp"
-                        android:textColor="#fff"
-                        android:text=""/>
+                        android:textColor="#fff" />
+
 
                 </LinearLayout>
 

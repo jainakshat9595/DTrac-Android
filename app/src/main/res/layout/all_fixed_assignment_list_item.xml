@@ -51,7 +51,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/pt_sans"
-                        android:text="Akshat Jain"
                         android:textColor="#000"
                         android:textSize="16dp" />
 
@@ -61,7 +60,6 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/pt_sans"
                         android:layout_marginTop="8dp"
-                        android:text="9716193060"
                         android:textSize="14dp" />
 
                     <TextView
@@ -69,7 +67,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/pt_sans"
-                        android:text="New Delhi"
                         android:textSize="14dp" />
 
                 </LinearLayout>
@@ -90,7 +87,6 @@
                         android:fontFamily="@font/pt_sans"
                         android:textSize="22dp"
                         android:padding="5dp"
-                        android:text="345/-"
                         android:textColor="@color/colorAccent"/>
 
                 </LinearLayout>
@@ -110,8 +106,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="10dp"
-                    android:fontFamily="@font/pt_sans"
-                    android:text="Akshat Jain - 9716193060"/>
+                    android:fontFamily="@font/pt_sans" />
 
             </LinearLayout>
 

@@ -186,7 +186,7 @@ public class AllOrderAdapter extends RecyclerView.Adapter<AllOrderAdapter.MyView
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         mProgress.dismiss();
-                        Log.d("AgentFragment", error.getMessage());
+                        error.printStackTrace();
                     }
                 })
         {

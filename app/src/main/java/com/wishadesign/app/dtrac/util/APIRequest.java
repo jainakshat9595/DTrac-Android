@@ -47,6 +47,15 @@ public class APIRequest {
         getRequestQueue().add(req);
     }
 
+    public void cancelAll() {
+        getRequestQueue().cancelAll(new RequestQueue.RequestFilter() {
+            @Override
+            public boolean apply(Request<?> request) {
+                return true;
+            }
+        });
+    }
+
     public void createRequest(String url) {
 
     }

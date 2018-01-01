@@ -19,7 +19,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Welcome to DTrac"
+            android:text="@string/welcome_to_dtrac"
             android:textAlignment="center"
             android:textColor="#fff"
             android:textSize="25sp"

@@ -23,6 +23,7 @@ import com.wishadesign.app.dtrac.model.Agent;
 import com.wishadesign.app.dtrac.model.Outlet;
 import com.wishadesign.app.dtrac.util.APIRequest;
 import com.wishadesign.app.dtrac.util.Config;
+import com.wishadesign.app.dtrac.util.CustomFragment;
 import com.wishadesign.app.dtrac.util.SessionManager;
 
 import org.json.JSONArray;
@@ -33,7 +34,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class OutletFragment extends Fragment {
+public class OutletFragment extends CustomFragment {
 
     private static OutletFragment instance;
 
@@ -52,7 +53,7 @@ public class OutletFragment extends Fragment {
     public OutletFragment() {
     }
 
-    public static Fragment newInstance() {
+    public static CustomFragment newInstance() {
         if(instance == null) {
             instance = new OutletFragment();
         }
@@ -161,7 +162,7 @@ public class OutletFragment extends Fragment {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         mProgress.dismiss();
-                        Log.d("OutletFragment", error.getMessage());
+                        error.printStackTrace();
                     }
                 })
         {
@@ -177,4 +178,9 @@ public class OutletFragment extends Fragment {
         APIRequest.getInstance(getContext()).addToRequestQueue(strRequest);
     }
 
+    @Override
+    public void refresh() {
+        super.refresh();
+        getAllOutlets();
+    }
 }

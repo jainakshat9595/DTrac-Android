@@ -1,20 +1,28 @@
 package com.wishadesign.app.dtrac.activity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
+import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.wishadesign.app.dtrac.DTracApplication;
 import com.wishadesign.app.dtrac.R;
+import com.wishadesign.app.dtrac.util.APIRequest;
+import com.wishadesign.app.dtrac.util.ConnectivityReceiver;
 import com.wishadesign.app.dtrac.util.SessionManager;
 
 /**
  * Created by aksha on 12/9/2017.
  */
 
-public class SplashActivity extends AppCompatActivity {
+public class SplashActivity extends AppCompatActivity implements ConnectivityReceiver.ConnectivityReceiverListener {
 
     private final int SPLASH_DISPLAY_LENGTH = 1000;
 
@@ -40,5 +48,26 @@ public class SplashActivity extends AppCompatActivity {
                 }
             }
         }, SPLASH_DISPLAY_LENGTH);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        DTracApplication.getInstance().setConnectivityListener(this);
+    }
+
+    @Override
+    public void onNetworkConnectionChanged(boolean isConnected) {
+        String message;
+        if (isConnected) {
+            message = "Connected to Internet";
+        } else {
+            APIRequest.getInstance(getBaseContext()).cancelAll();
+            message = "Sorry! Not connected to internet";
+        }
+
+        Toast snackbar = Toast.makeText(getBaseContext(), message, Toast.LENGTH_LONG);
+
+        snackbar.show();
     }
 }

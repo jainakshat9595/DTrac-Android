@@ -23,6 +23,7 @@ import com.wishadesign.app.dtrac.model.FixedAssignment;
 import com.wishadesign.app.dtrac.model.Outlet;
 import com.wishadesign.app.dtrac.util.APIRequest;
 import com.wishadesign.app.dtrac.util.Config;
+import com.wishadesign.app.dtrac.util.CustomFragment;
 import com.wishadesign.app.dtrac.util.SessionManager;
 
 import org.json.JSONArray;
@@ -33,7 +34,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class FixedAssignmentFragment extends Fragment {
+public class FixedAssignmentFragment extends CustomFragment {
 
     private static FixedAssignmentFragment instance;
 
@@ -52,7 +53,7 @@ public class FixedAssignmentFragment extends Fragment {
     public FixedAssignmentFragment() {
     }
 
-    public static Fragment newInstance() {
+    public static CustomFragment newInstance() {
         if(instance == null) {
             instance = new FixedAssignmentFragment();
         }
@@ -161,7 +162,7 @@ public class FixedAssignmentFragment extends Fragment {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         mProgress.dismiss();
-                        Log.d("FixedAssignmentFragment", error.getMessage());
+                        error.printStackTrace();
                     }
                 })
         {
@@ -177,4 +178,9 @@ public class FixedAssignmentFragment extends Fragment {
         APIRequest.getInstance(getContext()).addToRequestQueue(strRequest);
     }
 
+    @Override
+    public void refresh() {
+        super.refresh();
+        getAllFixedAssignments();
+    }
 }

@@ -148,7 +148,7 @@ public class AllAgentsAdapter extends RecyclerView.Adapter<AllAgentsAdapter.MyVi
             public void onResponse(String response) {
                 mProgress.dismiss();
                 try {
-                    Snackbar.make(parentView, "Agent status successfully updated.", Snackbar.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, "Agent status successfully updated.", Toast.LENGTH_SHORT).show();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -158,7 +158,7 @@ public class AllAgentsAdapter extends RecyclerView.Adapter<AllAgentsAdapter.MyVi
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         mProgress.dismiss();
-                        Log.d("AgentFragment", error.getMessage());
+                        error.printStackTrace();
                     }
                 })
         {

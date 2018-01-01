@@ -2,10 +2,12 @@ package com.wishadesign.app.dtrac.activity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -25,11 +27,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.crashlytics.android.Crashlytics;
+import com.wishadesign.app.dtrac.DTracApplication;
 import com.wishadesign.app.dtrac.R;
 import com.wishadesign.app.dtrac.fragment.AgentFragment;
 import com.wishadesign.app.dtrac.fragment.DashboardFragment;
@@ -38,6 +43,8 @@ import com.wishadesign.app.dtrac.fragment.OrderFragment;
 import com.wishadesign.app.dtrac.fragment.OutletFragment;
 import com.wishadesign.app.dtrac.util.APIRequest;
 import com.wishadesign.app.dtrac.util.Config;
+import com.wishadesign.app.dtrac.util.ConnectivityReceiver;
+import com.wishadesign.app.dtrac.util.CustomFragment;
 import com.wishadesign.app.dtrac.util.SessionManager;
 import com.wishadesign.app.dtrac.util.Util;
 
@@ -48,7 +55,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, SwipeRefreshLayout.OnRefreshListener {
+        implements NavigationView.OnNavigationItemSelectedListener, SwipeRefreshLayout.OnRefreshListener, ConnectivityReceiver.ConnectivityReceiverListener {
 
     private TextView mNavUsername;
     private TextView mNavEmail;
@@ -67,6 +74,8 @@ public class MainActivity extends AppCompatActivity
 
     private FragmentManager fm;
     private FragmentTransaction ft;
+
+    private CustomFragment mCurrentFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,15 +109,15 @@ public class MainActivity extends AppCompatActivity
         ft = fm.beginTransaction();
 
         if (id == R.id.nav_dashboard) {
-            ft.replace(R.id.main_container, DashboardFragment.newInstance());
+            mCurrentFragment = DashboardFragment.newInstance();
         } else if (id == R.id.nav_agents) {
-            ft.replace(R.id.main_container, AgentFragment.newInstance());
+            mCurrentFragment = AgentFragment.newInstance();
         } else if (id == R.id.nav_all_outlets) {
-            ft.replace(R.id.main_container, OutletFragment.newInstance());
+            mCurrentFragment = OutletFragment.newInstance();
         } else if (id == R.id.nav_fixed_assignment) {
-            ft.replace(R.id.main_container, FixedAssignmentFragment.newInstance());
+            mCurrentFragment = FixedAssignmentFragment.newInstance();
         } else if (id == R.id.nav_orders) {
-            ft.replace(R.id.main_container, OrderFragment.newInstance());
+            mCurrentFragment = OrderFragment.newInstance();
         } else if (id == R.id.nav_crm) {
 
         } else if (id == R.id.nav_logout) {
@@ -116,6 +125,7 @@ public class MainActivity extends AppCompatActivity
             finish();
         }
 
+        ft.replace(R.id.main_container, mCurrentFragment);
         ft.commit();
 
         mDrawer.closeDrawer(GravityCompat.START);
@@ -181,7 +191,8 @@ public class MainActivity extends AppCompatActivity
         fm = getSupportFragmentManager();
 
         ft = fm.beginTransaction();
-        ft.add(R.id.main_container, DashboardFragment.newInstance());
+        mCurrentFragment = DashboardFragment.newInstance();
+        ft.add(R.id.main_container, mCurrentFragment);
         ft.commit();
 
     }
@@ -207,7 +218,7 @@ public class MainActivity extends AppCompatActivity
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         mProgress.dismiss();
-                        Log.d("MainActivity", error.getMessage());
+                        error.printStackTrace();
                     }
                 })
         {
@@ -226,6 +237,29 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onRefresh() {
         Log.d("MainActivity", "Refresh Called");
+        getUserDetails();
+        mCurrentFragment.refresh();
         mSwipeRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        DTracApplication.getInstance().setConnectivityListener(this);
+    }
+
+    @Override
+    public void onNetworkConnectionChanged(boolean isConnected) {
+        String message;
+        if (isConnected) {
+            message = "Connected to Internet";
+        } else {
+            APIRequest.getInstance(getBaseContext()).cancelAll();
+            message = "Sorry! Not connected to internet";
+        }
+
+        Toast snackbar = Toast.makeText(getBaseContext(), message, Toast.LENGTH_LONG);
+
+        snackbar.show();
     }
 }

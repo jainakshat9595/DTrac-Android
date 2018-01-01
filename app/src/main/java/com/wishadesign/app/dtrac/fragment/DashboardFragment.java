@@ -20,6 +20,7 @@ import com.wishadesign.app.dtrac.model.Agent;
 import com.wishadesign.app.dtrac.model.FreelancerRequest;
 import com.wishadesign.app.dtrac.util.APIRequest;
 import com.wishadesign.app.dtrac.util.Config;
+import com.wishadesign.app.dtrac.util.CustomFragment;
 import com.wishadesign.app.dtrac.util.SessionManager;
 
 import org.json.JSONArray;
@@ -30,7 +31,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class DashboardFragment extends Fragment {
+public class DashboardFragment extends CustomFragment {
 
     private static DashboardFragment instance;
 
@@ -51,7 +52,7 @@ public class DashboardFragment extends Fragment {
     public DashboardFragment() {
     }
 
-    public static Fragment newInstance() {
+    public static CustomFragment newInstance() {
         if(instance == null) {
             instance = new DashboardFragment();
         }
@@ -121,7 +122,7 @@ public class DashboardFragment extends Fragment {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         mProgress.dismiss();
-                        Log.d("DashboardFragment", error.getMessage());
+                        error.printStackTrace();
                     }
                 })
         {
@@ -160,7 +161,7 @@ public class DashboardFragment extends Fragment {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         mProgress.dismiss();
-                        Log.d("DashboardFragment", error.getMessage());
+                        error.printStackTrace();
                     }
                 })
         {
@@ -177,4 +178,10 @@ public class DashboardFragment extends Fragment {
         APIRequest.getInstance(getContext()).addToRequestQueue(strRequest);
     }
 
+    @Override
+    public void refresh() {
+        super.refresh();
+        getLatestFreelancerRequest();
+        getLatestAgents();
+    }
 }

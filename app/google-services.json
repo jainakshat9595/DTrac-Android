@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "333834905160",
+    "firebase_url": "https://dtrac-19d9e.firebaseio.com",
+    "project_id": "dtrac-19d9e",
+    "storage_bucket": "dtrac-19d9e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:333834905160:android:4765877569996a68",
+        "android_client_info": {
+          "package_name": "com.wishadesign.app.dtrac"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "333834905160-q3pugh61sgl441vbq53av6nl511kp0gd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.wishadesign.app.dtrac",
+            "certificate_hash": "d8dd6a1057606c3727f685ebfa1fc96b9e067201"
+          }
+        },
+        {
+          "client_id": "333834905160-jeee37kgmv011t8nn7tm5aosv022urkk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAYFa-FtzrCe6J4XJ3d__EIZeYK2owNUNE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "333834905160-jeee37kgmv011t8nn7tm5aosv022urkk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

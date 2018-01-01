@@ -23,6 +23,7 @@ import com.wishadesign.app.dtrac.model.Order;
 import com.wishadesign.app.dtrac.model.Outlet;
 import com.wishadesign.app.dtrac.util.APIRequest;
 import com.wishadesign.app.dtrac.util.Config;
+import com.wishadesign.app.dtrac.util.CustomFragment;
 import com.wishadesign.app.dtrac.util.SessionManager;
 
 import org.json.JSONArray;
@@ -33,7 +34,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class OrderFragment extends Fragment {
+public class OrderFragment extends CustomFragment {
 
     private static OrderFragment instance;
 
@@ -53,7 +54,7 @@ public class OrderFragment extends Fragment {
     public OrderFragment() {
     }
 
-    public static Fragment newInstance() {
+    public static CustomFragment newInstance() {
         if(instance == null) {
             instance = new OrderFragment();
         }
@@ -166,7 +167,7 @@ public class OrderFragment extends Fragment {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         mProgress.dismiss();
-                        Log.d("OrderFragment", error.getMessage());
+                        error.printStackTrace();
                     }
                 })
         {
@@ -211,7 +212,7 @@ public class OrderFragment extends Fragment {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         mProgress.dismiss();
-                        Log.d("AgentFragment", error.getMessage());
+                        error.printStackTrace();
                     }
                 })
         {
@@ -227,4 +228,9 @@ public class OrderFragment extends Fragment {
         APIRequest.getInstance(getContext()).addToRequestQueue(strRequest);
     }
 
+    @Override
+    public void refresh() {
+        super.refresh();
+        getAllOrders();
+    }
 }
