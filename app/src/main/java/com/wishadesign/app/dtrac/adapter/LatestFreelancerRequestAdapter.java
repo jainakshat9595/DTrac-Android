@@ -64,11 +64,12 @@ public class LatestFreelancerRequestAdapter extends RecyclerView.Adapter<LatestF
 
         if(data.getStatus().equals("Accepted")) {
             final int sdk = android.os.Build.VERSION.SDK_INT;
-            if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-                holder.status.setBackgroundDrawable( mContext.getResources().getDrawable(R.drawable.circle_green) );
-            } else {
-                holder.status.setBackground( mContext.getResources().getDrawable(R.drawable.circle_green) );
+            try {
+                holder.status.setBackground( mContext.getResources().getDrawable(R.drawable.circle_green));
+            } catch (Exception e) {
+                e.printStackTrace();
             }
+
         }
     }
 
