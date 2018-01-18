@@ -95,22 +95,6 @@
 
                 </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:paddingLeft="16dp"
-                    android:paddingRight="16dp"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="8dp">
-
-                    <Switch
-                        android:id="@+id/agent_status_switch"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"/>
-
-                </LinearLayout>
-
             </LinearLayout>
 
             <LinearLayout
@@ -129,6 +113,36 @@
                     android:textSize="10dp"
                     android:fontFamily="@font/pt_sans" />
 
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:paddingBottom="8dp">
+
+                <Button
+                    android:id="@+id/agent_status_switch_disable"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:fontFamily="@font/pt_sans"
+                    android:background="@color/grey"
+                    android:textColor="#fff"
+                    android:text="Deactivate" />
+
+                <Button
+                    android:id="@+id/agent_status_switch_enable"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:fontFamily="@font/pt_sans"
+                    android:background="@color/colorAccent"
+                    android:textColor="#fff"
+                    android:text="Activate"/>
 
             </LinearLayout>
 

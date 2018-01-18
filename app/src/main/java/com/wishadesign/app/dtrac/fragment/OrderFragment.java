@@ -3,6 +3,7 @@ package com.wishadesign.app.dtrac.fragment;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -34,7 +35,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class OrderFragment extends CustomFragment {
+public class OrderFragment extends CustomFragment implements SwipeRefreshLayout.OnRefreshListener {
 
     private static OrderFragment instance;
 
@@ -50,6 +51,8 @@ public class OrderFragment extends CustomFragment {
     private SearchView mSearchView;
 
     private ArrayList<Order> mFilteredDataList;
+
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     public OrderFragment() {
     }
@@ -70,6 +73,9 @@ public class OrderFragment extends CustomFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_orders, container, false);
+
+        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
 
         mSessionManager = SessionManager.getInstance(getContext());
 
@@ -202,6 +208,7 @@ public class OrderFragment extends CustomFragment {
                     }
                     Log.d("OrderFragment", response);
                     mAdapter.setAgentData(mAllOrdersAgentList);
+                    mAllOrderRV.getRecycledViewPool().clear();
                     mAdapter.notifyDataSetChanged();
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -232,5 +239,12 @@ public class OrderFragment extends CustomFragment {
     public void refresh() {
         super.refresh();
         getAllOrders();
+    }
+
+    @Override
+    public void onRefresh() {
+        Log.d("OrderFragment", "Refresh Called");
+        refresh();
+        mSwipeRefreshLayout.setRefreshing(false);
     }
 }

@@ -1,25 +1,31 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<android.support.v4.widget.SwipeRefreshLayout android:id="@+id/swipe_refresh_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     tools:context="com.wishadesign.app.dtrac.fragment.AgentFragment"
-    android:paddingTop="55dp">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <View
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="5dp" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <android.support.v7.widget.SearchView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:queryHint="Filter by Name or City"
-        android:id="@+id/all_agent_searchview" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="5dp" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/all_agent_rv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        <android.support.v7.widget.SearchView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:queryHint="Filter by Name or City"
+            android:id="@+id/all_agent_searchview" />
 
-</LinearLayout>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/all_agent_rv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+</android.support.v4.widget.SwipeRefreshLayout>

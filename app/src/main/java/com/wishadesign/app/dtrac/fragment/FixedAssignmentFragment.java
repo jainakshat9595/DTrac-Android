@@ -3,6 +3,7 @@ package com.wishadesign.app.dtrac.fragment;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -34,7 +35,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class FixedAssignmentFragment extends CustomFragment {
+public class FixedAssignmentFragment extends CustomFragment implements SwipeRefreshLayout.OnRefreshListener {
 
     private static FixedAssignmentFragment instance;
 
@@ -49,6 +50,8 @@ public class FixedAssignmentFragment extends CustomFragment {
     private SearchView mSearchView;
 
     private ArrayList<FixedAssignment> mFilteredDataList;
+
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     public FixedAssignmentFragment() {
     }
@@ -69,6 +72,9 @@ public class FixedAssignmentFragment extends CustomFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_fixed_assignments, container, false);
+
+        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
 
         mSessionManager = SessionManager.getInstance(getContext());
 
@@ -152,6 +158,7 @@ public class FixedAssignmentFragment extends CustomFragment {
                         mAllFixedAssignmentList.add(FixedAssignment.parse((JSONObject) fixed_assignment_array.get(i)));
                     }
                     mAdapter.setData(mAllFixedAssignmentList);
+                    mAllFixedAssignmentRV.getRecycledViewPool().clear();
                     mAdapter.notifyDataSetChanged();
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -182,5 +189,12 @@ public class FixedAssignmentFragment extends CustomFragment {
     public void refresh() {
         super.refresh();
         getAllFixedAssignments();
+    }
+
+    @Override
+    public void onRefresh() {
+        Log.d("FixedAssignmentFragment", "Refresh Called");
+        refresh();
+        mSwipeRefreshLayout.setRefreshing(false);
     }
 }

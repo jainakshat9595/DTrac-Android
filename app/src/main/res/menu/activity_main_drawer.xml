@@ -13,18 +13,13 @@
             android:icon="@drawable/account_multiple"
             android:title="Agents" />
         <item
-            android:title="Outlets">
-            <menu>
-                <item
-                    android:id="@+id/nav_all_outlets"
-                    android:icon="@drawable/hospital_building"
-                    android:title="All Outlets" />
-                <item
-                    android:id="@+id/nav_fixed_assignment"
-                    android:icon="@drawable/auto_fix"
-                    android:title="Fixed Assignments" />
-            </menu>
-        </item>
+            android:id="@+id/nav_all_outlets"
+            android:icon="@drawable/hospital_building"
+            android:title="All Outlets" />
+        <item
+            android:id="@+id/nav_fixed_assignment"
+            android:icon="@drawable/auto_fix"
+            android:title="Fixed Assignments" />
         <item
             android:id="@+id/nav_orders"
             android:icon="@drawable/receipt"
@@ -33,10 +28,10 @@
             <!--android:id="@+id/nav_da_topup"-->
             <!--android:icon="@drawable/plus_box"-->
             <!--android:title="DA Top Up" />-->
-        <item
-            android:id="@+id/nav_crm"
-            android:icon="@drawable/chart_histogram"
-            android:title="CRM" />
+        <!--<item-->
+            <!--android:id="@+id/nav_crm"-->
+            <!--android:icon="@drawable/chart_histogram"-->
+            <!--android:title="CRM" />-->
         <item
             android:id="@+id/nav_logout"
             android:icon="@drawable/logout"

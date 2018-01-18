@@ -19,37 +19,32 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.wishadesign.app.dtrac.R;
-import com.wishadesign.app.dtrac.fragment.OrderFragment;
+import com.wishadesign.app.dtrac.fragment.LatestAgentsFragment;
+import com.wishadesign.app.dtrac.fragment.LatestOrdersFragment;
 import com.wishadesign.app.dtrac.model.Agent;
 import com.wishadesign.app.dtrac.model.Order;
-import com.wishadesign.app.dtrac.model.Outlet;
 import com.wishadesign.app.dtrac.util.APIRequest;
 import com.wishadesign.app.dtrac.util.Config;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
  * Created by aksha on 12/15/2017.
  */
 
-public class AllOrderAdapter extends RecyclerView.Adapter<AllOrderAdapter.MyViewHolder> {
+public class LatestOrdersAdapter extends RecyclerView.Adapter<LatestOrdersAdapter.MyViewHolder> {
 
-    private OrderFragment mParentFragment;
+    private ArrayList<Agent> mAgentDataList;
+    private final LatestOrdersFragment mParentFragment;
     private Context mContext;
     private ArrayList<Order> mDataList;
-    private ArrayList<Agent> mAgentDataList;
 
     private ProgressDialog mProgress;
-
-    private View parentView;
-
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
@@ -66,7 +61,6 @@ public class AllOrderAdapter extends RecyclerView.Adapter<AllOrderAdapter.MyView
 
         public MyViewHolder(View view) {
             super(view);
-
             orderName = (TextView) view.findViewById(R.id.order_name);
             orderAddress = (TextView) view.findViewById(R.id.order_address);
             orderAmount = (TextView) view.findViewById(R.id.order_amount);
@@ -81,11 +75,16 @@ public class AllOrderAdapter extends RecyclerView.Adapter<AllOrderAdapter.MyView
         }
     }
 
-    public AllOrderAdapter(OrderFragment orderFragment, Context context, ArrayList<Order> mDataList, ArrayList<Agent> mAgentDataList) {
+    public LatestOrdersAdapter(Context context, ArrayList<Order> mDataList, ArrayList<Agent> mAgentDataList, LatestOrdersFragment mParentFragment) {
         this.mContext = context;
         this.mDataList = mDataList;
         this.mAgentDataList = mAgentDataList;
-        this.mParentFragment = orderFragment;
+        this.mParentFragment = mParentFragment;
+
+        mProgress = new ProgressDialog(context);
+        mProgress.setTitle("Loading");
+        mProgress.setMessage("Wait while loading...");
+        mProgress.setCancelable(false);
     }
 
     @Override
@@ -93,18 +92,11 @@ public class AllOrderAdapter extends RecyclerView.Adapter<AllOrderAdapter.MyView
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.all_order_list_item, parent, false);
 
-        parentView = itemView;
-
-        mProgress = new ProgressDialog(mContext);
-        mProgress.setTitle("Loading");
-        mProgress.setMessage("Wait while loading...");
-        mProgress.setCancelable(false);
-
         return new MyViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, final int position) {
+    public void onBindViewHolder(MyViewHolder holder, int position) {
         final Order data = mDataList.get(position);
 
         String status = data.getStatus();
@@ -116,50 +108,12 @@ public class AllOrderAdapter extends RecyclerView.Adapter<AllOrderAdapter.MyView
         holder.orderOutletName.setText(data.getOutletName());
         holder.orderAgentName.setText("Agent: "+data.getAgentName());
         holder.orderTime.setText(data.getCreatedAt());
-        if(status.equals("Arrived At Location")) {
-            holder.orderReassignButtonEnable.setVisibility(View.VISIBLE);
-            holder.orderReassignButtonDisable.setVisibility(View.GONE);
-        } else {
-            holder.orderReassignButtonEnable.setVisibility(View.GONE);
-            holder.orderReassignButtonDisable.setVisibility(View.VISIBLE);
-        }
-
-        holder.orderReassignButtonEnable.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                LayoutInflater factory = LayoutInflater.from(mContext);
-                final View reassignDialogView = factory.inflate(R.layout.reassign_dialog_view, null);
-                final AlertDialog reassignDialog = new AlertDialog.Builder(mContext).create();
-                reassignDialog.setView(reassignDialogView);
-                final Spinner agentListSpinner = (Spinner) reassignDialogView.findViewById(R.id.reassign_agent_list);
-                ArrayAdapter<Agent> dataAdapter = new ArrayAdapter<Agent>(mContext, android.R.layout.simple_spinner_item, mAgentDataList);
-                dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                agentListSpinner.setAdapter(dataAdapter);
-                reassignDialogView.findViewById(R.id.reassign_confirm).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        reassignOrder(((Agent)agentListSpinner.getSelectedItem()).getUserId(), data.getOrderId());
-                        reassignDialog.dismiss();
-                    }
-                });
-                reassignDialogView.findViewById(R.id.reassign_cancel).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        reassignDialog.dismiss();
-                    }
-                });
-                reassignDialog.show();
-            }
-        });
-
+        holder.orderReassignButtonDisable.setVisibility(View.GONE);
+        holder.orderReassignButtonEnable.setVisibility(View.GONE);
     }
 
     public void setData(ArrayList<Order> dataList) {
         this.mDataList = dataList;
-    }
-
-    public void setAgentData(ArrayList<Agent> mAgentDataList) {
-        this.mAgentDataList = mAgentDataList;
     }
 
     @Override
@@ -176,7 +130,7 @@ public class AllOrderAdapter extends RecyclerView.Adapter<AllOrderAdapter.MyView
                     JSONObject resp = new JSONObject(response);
                     Log.d("OrderFragment", response);
                     Toast.makeText(mContext, resp.getString("message"), Toast.LENGTH_SHORT).show();
-                    mParentFragment.getAllOrders();
+                    mParentFragment.refresh();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -204,4 +158,8 @@ public class AllOrderAdapter extends RecyclerView.Adapter<AllOrderAdapter.MyView
         APIRequest.getInstance(mContext).addToRequestQueue(strRequest);
     }
 
+    public void setAgentData(ArrayList<Agent> mAgentDataList) {
+        this.mAgentDataList = mAgentDataList;
+        notifyDataSetChanged();
+    }
 }

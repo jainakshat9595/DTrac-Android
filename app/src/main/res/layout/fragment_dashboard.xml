@@ -4,8 +4,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    tools:context="com.wishadesign.app.dtrac.fragment.DashboardFragment"
-    android:paddingTop="55dp">
+    tools:context="com.wishadesign.app.dtrac.fragment.DashboardFragment">
 
     <android.support.design.widget.TabLayout
         android:id="@+id/dashboard_tabs"

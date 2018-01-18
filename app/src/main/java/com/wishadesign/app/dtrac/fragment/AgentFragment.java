@@ -5,6 +5,7 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -36,7 +37,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class AgentFragment extends CustomFragment {
+public class AgentFragment extends CustomFragment implements SwipeRefreshLayout.OnRefreshListener {
 
     private static AgentFragment instance;
 
@@ -51,6 +52,8 @@ public class AgentFragment extends CustomFragment {
     private SearchView mSearchView;
 
     private ArrayList<Agent> mFilteredDataList;
+
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     public AgentFragment() {
     }
@@ -71,6 +74,9 @@ public class AgentFragment extends CustomFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_agents, container, false);
+
+        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
 
         mSessionManager = SessionManager.getInstance(getContext());
 
@@ -155,6 +161,7 @@ public class AgentFragment extends CustomFragment {
                     }
                     Log.d("AgentFragment", response);
                     mAdapter.setData(mAllAgentsList);
+                    mAllAgentRV.getRecycledViewPool().clear();
                     mAdapter.notifyDataSetChanged();
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -185,5 +192,12 @@ public class AgentFragment extends CustomFragment {
     public void refresh() {
         super.refresh();
         getAllAgents();
+    }
+
+    @Override
+    public void onRefresh() {
+        Log.d("AgentFragment", "Refresh Called");
+        refresh();
+        mSwipeRefreshLayout.setRefreshing(false);
     }
 }

@@ -55,7 +55,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, SwipeRefreshLayout.OnRefreshListener, ConnectivityReceiver.ConnectivityReceiverListener {
+        implements NavigationView.OnNavigationItemSelectedListener, ConnectivityReceiver.ConnectivityReceiverListener {
 
     private TextView mNavUsername;
     private TextView mNavEmail;
@@ -118,8 +118,6 @@ public class MainActivity extends AppCompatActivity
             mCurrentFragment = FixedAssignmentFragment.newInstance();
         } else if (id == R.id.nav_orders) {
             mCurrentFragment = OrderFragment.newInstance();
-        } else if (id == R.id.nav_crm) {
-
         } else if (id == R.id.nav_logout) {
             mSessionManager.logoutUser();
             finish();
@@ -185,9 +183,6 @@ public class MainActivity extends AppCompatActivity
         mProgress.setMessage("Wait while loading...");
         mProgress.setCancelable(false);
 
-        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
-        mSwipeRefreshLayout.setOnRefreshListener(this);
-
         fm = getSupportFragmentManager();
 
         ft = fm.beginTransaction();
@@ -232,14 +227,6 @@ public class MainActivity extends AppCompatActivity
 
         mProgress.show();
         APIRequest.getInstance(getBaseContext()).addToRequestQueue(strRequest);
-    }
-
-    @Override
-    public void onRefresh() {
-        Log.d("MainActivity", "Refresh Called");
-        getUserDetails();
-        mCurrentFragment.refresh();
-        mSwipeRefreshLayout.setRefreshing(false);
     }
 
     @Override

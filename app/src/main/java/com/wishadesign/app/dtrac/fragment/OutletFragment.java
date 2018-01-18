@@ -3,6 +3,7 @@ package com.wishadesign.app.dtrac.fragment;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -34,7 +35,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class OutletFragment extends CustomFragment {
+public class OutletFragment extends CustomFragment implements SwipeRefreshLayout.OnRefreshListener {
 
     private static OutletFragment instance;
 
@@ -49,6 +50,8 @@ public class OutletFragment extends CustomFragment {
     private SearchView mSearchView;
 
     private ArrayList<Outlet> mFilteredDataList;
+
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     public OutletFragment() {
     }
@@ -69,6 +72,9 @@ public class OutletFragment extends CustomFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_outlets, container, false);
+
+        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
 
         mSessionManager = SessionManager.getInstance(getContext());
 
@@ -152,6 +158,7 @@ public class OutletFragment extends CustomFragment {
                         mAllOutletsList.add(Outlet.parse((JSONObject) outlets_array.get(i)));
                     }
                     mAdapter.setData(mAllOutletsList);
+                    mAllOutletRV.getRecycledViewPool().clear();
                     mAdapter.notifyDataSetChanged();
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -182,5 +189,12 @@ public class OutletFragment extends CustomFragment {
     public void refresh() {
         super.refresh();
         getAllOutlets();
+    }
+
+    @Override
+    public void onRefresh() {
+        Log.d("OutletFragment", "Refresh Called");
+        refresh();
+        mSwipeRefreshLayout.setRefreshing(false);
     }
 }

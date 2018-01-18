@@ -18,6 +18,7 @@ import com.wishadesign.app.dtrac.R;
 import com.wishadesign.app.dtrac.adapter.DashboardPagerAdapter;
 import com.wishadesign.app.dtrac.model.Agent;
 import com.wishadesign.app.dtrac.model.FreelancerRequest;
+import com.wishadesign.app.dtrac.model.Order;
 import com.wishadesign.app.dtrac.util.APIRequest;
 import com.wishadesign.app.dtrac.util.Config;
 import com.wishadesign.app.dtrac.util.CustomFragment;
@@ -39,6 +40,8 @@ public class DashboardFragment extends CustomFragment {
 
     private ArrayList<FreelancerRequest> mLatestFreelancerRequestList;
     private ArrayList<Agent> mLatestAgentsList;
+    private ArrayList<Order> mLatestOrdersList;
+    private ArrayList<Agent> mAllOrdersAgentList;
 
     private ProgressDialog mProgress;
 
@@ -48,6 +51,7 @@ public class DashboardFragment extends CustomFragment {
 
     private LatestFreelancerRequestFragment mLatestFreelancerRequestFragment;
     private LatestAgentsFragment mLatestAgentsFragment;
+    private LatestOrdersFragment mLatestOrdersFragment;
 
     public DashboardFragment() {
     }
@@ -83,17 +87,21 @@ public class DashboardFragment extends CustomFragment {
 
         mDashboardPagerAdapter = new DashboardPagerAdapter(getChildFragmentManager());
 
-        mLatestFreelancerRequestFragment = LatestFreelancerRequestFragment.newInstance();
-        mLatestAgentsFragment = LatestAgentsFragment.newInstance();
+        mLatestFreelancerRequestFragment = LatestFreelancerRequestFragment.newInstance(this);
+        mLatestAgentsFragment = LatestAgentsFragment.newInstance(this);
+        mLatestOrdersFragment = LatestOrdersFragment.newInstance(this);
 
-        mDashboardPagerAdapter.addFragment(LatestOrdersFragment.newInstance(),"Latest Orders");
+        mDashboardPagerAdapter.addFragment(mLatestOrdersFragment,"Latest Orders");
         mDashboardPagerAdapter.addFragment(mLatestFreelancerRequestFragment,"Latest Freelancers Request");
         mDashboardPagerAdapter.addFragment(mLatestAgentsFragment,"Latest Agents");
         mDashboardPager.setAdapter(mDashboardPagerAdapter);
 
         mLatestFreelancerRequestList = new ArrayList<FreelancerRequest>();
         mLatestAgentsList = new ArrayList<Agent>();
+        mLatestOrdersList= new ArrayList<Order>();
+        mAllOrdersAgentList = new ArrayList<Agent>();
 
+        getLatestOrders();
         getLatestFreelancerRequest();
         getLatestAgents();
 
@@ -108,7 +116,7 @@ public class DashboardFragment extends CustomFragment {
                 try {
                     JSONObject resp = new JSONObject(response);
                     JSONArray request_array = resp.getJSONArray("ff_requests");
-                    mLatestAgentsList.clear();
+                    mLatestFreelancerRequestList.clear();
                     for (int i = 0; i < request_array.length(); i++) {
                         mLatestFreelancerRequestList.add(FreelancerRequest.parse((JSONObject) request_array.get(i)));
                     }
@@ -178,10 +186,112 @@ public class DashboardFragment extends CustomFragment {
         APIRequest.getInstance(getContext()).addToRequestQueue(strRequest);
     }
 
+    private void getLatestOrders() {
+        StringRequest strRequest = new StringRequest(Request.Method.POST, Config.BASE_URL+Config.PROCESS, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                mProgress.dismiss();
+                try {
+
+                    /*JSONObject resp = new JSONObject("{\n" +
+                            "\"result\": \"success\",\n" +
+                            "\"message\": \"Orders Found\",\n" +
+                            "\"orders\": [{\n" +
+                            "\"orderId\": \"57404f0aedcca\",\n" +
+                            "\"orderName\": \"9790880789\",\n" +
+                            "\"address\": \"testing 1\",\n" +
+                            "\"amount\": \"\",\n" +
+                            "\"status\": \"3769.48\",\n" +
+                            "\"paymentMode\": \"12.977435\",\n" +
+                            "\"outletName\": \"80.222679\",\n" +
+                            "\"agentName\": \"0\",\n" +
+                            "\"createdAt\": \"inactive\"\n" +
+                            "}]\n" +
+                            "}\n");*/
+                    JSONObject resp = new JSONObject(response);
+                    JSONArray orders_array = resp.getJSONArray("orders");
+                    mLatestOrdersList.clear();
+                    for (int i = 0; i < orders_array.length(); i++) {
+                        mLatestOrdersList.add(Order.parse((JSONObject) orders_array.get(i)));
+                    }
+                    mLatestOrdersFragment.setData(mLatestOrdersList);
+                    mProgress.show();
+                    getAllOrderAgents();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        mProgress.dismiss();
+                        error.printStackTrace();
+                    }
+                })
+        {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> param = new HashMap<String, String>();
+                param.put("fire", "get_latest_orders");
+                param.put("partnerId", mSessionManager.getToken());
+                return param;
+            }
+        };
+
+        mProgress.show();
+        APIRequest.getInstance(getContext()).addToRequestQueue(strRequest);
+    }
+
+    private void getAllOrderAgents() {
+        StringRequest strRequest = new StringRequest(Request.Method.POST, Config.BASE_URL+Config.GET_AGENT_LIST, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                mProgress.dismiss();
+                try {
+                    JSONObject resp = new JSONObject(response);
+                    JSONArray agents_array = resp.getJSONArray("agentList");
+                    mAllOrdersAgentList.clear();
+                    for (int i = 0; i < agents_array.length(); i++) {
+                        Agent agent = Agent.parse((JSONObject) agents_array.get(i));
+                        if(agent.getUserStatus().equals("Active")) {
+                            if(!mAllOrdersAgentList.contains(agent) && agent!=null) {
+                                mAllOrdersAgentList.add(agent);
+                            }
+                        }
+                    }
+                    Log.d("OrderFragment", response);
+                    mLatestOrdersFragment.setAgentData(mAllOrdersAgentList);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        mProgress.dismiss();
+                        error.printStackTrace();
+                    }
+                })
+        {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> param = new HashMap<String, String>();
+                param.put("userId", mSessionManager.getToken());
+                return param;
+            }
+        };
+
+        mProgress.show();
+        APIRequest.getInstance(getContext()).addToRequestQueue(strRequest);
+    }
+
     @Override
     public void refresh() {
         super.refresh();
         getLatestFreelancerRequest();
         getLatestAgents();
+        getLatestOrders();
     }
 }

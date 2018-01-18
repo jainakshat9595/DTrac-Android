@@ -157,7 +157,7 @@
                 android:background="@color/colorAccent"
                 android:textColor="#fff"
                 android:clickable="true"
-                android:text="Assign"/>
+                android:text="Re-Assign"/>
 
         </LinearLayout>
 

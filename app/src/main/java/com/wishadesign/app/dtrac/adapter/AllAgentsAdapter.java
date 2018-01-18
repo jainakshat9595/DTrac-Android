@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Filter;
 import android.widget.Filterable;
@@ -53,7 +54,8 @@ public class AllAgentsAdapter extends RecyclerView.Adapter<AllAgentsAdapter.MyVi
         private TextView city;
         private TextView amount;
         private View loginStatus;
-        private Switch statusButton;
+        private Button statusButtonEnable;
+        private Button statusButtonDisable;
         private TextView lastlocation;
 
         public MyViewHolder(View view) {
@@ -63,7 +65,8 @@ public class AllAgentsAdapter extends RecyclerView.Adapter<AllAgentsAdapter.MyVi
             city = (TextView) view.findViewById(R.id.agent_city);
             amount = (TextView) view.findViewById(R.id.agent_amount);
             loginStatus = (View) view.findViewById(R.id.agent_login_status);
-            statusButton = (Switch) view.findViewById(R.id.agent_status_switch);
+            statusButtonEnable = (Button) view.findViewById(R.id.agent_status_switch_enable);
+            statusButtonDisable = (Button) view.findViewById(R.id.agent_status_switch_disable);
             lastlocation = (TextView) view.findViewById(R.id.agent_last_location);
         }
     }
@@ -90,7 +93,7 @@ public class AllAgentsAdapter extends RecyclerView.Adapter<AllAgentsAdapter.MyVi
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, final int position) {
-        Agent data = mDataList.get(position);
+        final Agent data = mDataList.get(position);
 
         holder.name.setText(data.getUserFullName());
         holder.amount.setText(data.getTotal()+"/-");
@@ -107,18 +110,25 @@ public class AllAgentsAdapter extends RecyclerView.Adapter<AllAgentsAdapter.MyVi
             }
         }
 
-        if(data.getUserStatus().equals("InActive")) {
-            holder.statusButton.setChecked(false);
+        Log.d("UserStatus", data.getUserStatus());
+
+        if(data.getUserStatus().toLowerCase().equals("inactive")) {
+            holder.statusButtonDisable.setVisibility(View.GONE);
+        } else if(data.getUserStatus().toLowerCase().equals("active")) {
+            holder.statusButtonEnable.setVisibility(View.GONE);
         }
 
-        if(data.getUserStatus().equals("Active")) {
-            holder.statusButton.setChecked(true);
-        }
-
-        holder.statusButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        holder.statusButtonDisable.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                changeAgentStatus(mDataList.get(position).getUserId(), b);
+            public void onClick(View view) {
+                changeAgentStatus(mDataList.get(position).getUserId(), false);
+            }
+        });
+
+        holder.statusButtonEnable.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                changeAgentStatus(mDataList.get(position).getUserId(), true);
             }
         });
 
