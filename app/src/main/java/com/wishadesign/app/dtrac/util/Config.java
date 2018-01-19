@@ -6,7 +6,7 @@ package com.wishadesign.app.dtrac.util;
 
 public class Config {
 
-    public static final String BASE_URL = "https://www.vsstechnology.com/";
+    public static final String BASE_URL = "http://www.dtrac.in/";
 
     public static final String LOGIN = "cp/cp-login.php";
     public static final String USER_DETAILS = "cp/api/get-cp-info.php";
