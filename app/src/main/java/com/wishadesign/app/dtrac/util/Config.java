@@ -7,6 +7,7 @@ package com.wishadesign.app.dtrac.util;
 public class Config {
 
     public static final String BASE_URL = "http://www.dtrac.in/";
+    //public static final String BASE_URL = "http://www.vsstechnology.com/";
 
     public static final String LOGIN = "cp/cp-login.php";
     public static final String USER_DETAILS = "cp/api/get-cp-info.php";
@@ -17,6 +18,6 @@ public class Config {
     public static final String GET_FIXED_ASSIGNMENT_LIST = "cp/api/get-fixed-assignments.php";
     public static final String FORGOT_PASSWORD = "cp/api/forgot-password.php";
 
-    public static final String SIGNUP_CP_LINK = "http://www.vsstechnology.com/channel-partner.php";
+    public static final String SIGNUP_CP_LINK = BASE_URL+"cp/cp-register.php";
 
 }

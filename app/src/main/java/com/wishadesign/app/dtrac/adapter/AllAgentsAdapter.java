@@ -112,6 +112,9 @@ public class AllAgentsAdapter extends RecyclerView.Adapter<AllAgentsAdapter.MyVi
 
         Log.d("UserStatus", data.getUserStatus());
 
+        holder.statusButtonDisable.setVisibility(View.VISIBLE);
+        holder.statusButtonEnable.setVisibility(View.VISIBLE);
+
         if(data.getUserStatus().toLowerCase().equals("inactive")) {
             holder.statusButtonDisable.setVisibility(View.GONE);
         } else if(data.getUserStatus().toLowerCase().equals("active")) {

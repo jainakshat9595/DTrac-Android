@@ -161,7 +161,6 @@ public class AgentFragment extends CustomFragment implements SwipeRefreshLayout.
                     }
                     Log.d("AgentFragment", response);
                     mAdapter.setData(mAllAgentsList);
-                    mAllAgentRV.getRecycledViewPool().clear();
                     mAdapter.notifyDataSetChanged();
                 } catch (JSONException e) {
                     e.printStackTrace();
